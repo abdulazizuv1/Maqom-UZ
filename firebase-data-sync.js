@@ -206,7 +206,7 @@ class FirebaseDataSync {
                 </div>
                 <h3 class="news-title">${news.title}</h3>
                 <p class="news-excerpt">${news.excerpt}</p>
-                <a href="#" class="news-link" onclick="firebaseDataSync.showNewsModal('${news.id}')">
+                <a href="news-detail.html?id=${news.id}" class="news-link">
                     Batafsil <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

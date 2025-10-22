@@ -194,6 +194,25 @@
     </style>
   </head>
   <body>
+    <!-- Page Loader -->
+    <div id="pageLoader" class="page-loader">
+      <div class="loader-container">
+        <div class="loader-dots">
+          <div class="loader-logo">
+            <img src="./img/logo.jpg" alt="Maqom School Logo" />
+          </div>
+          <div class="dot dot-1"></div>
+          <div class="dot dot-2"></div>
+          <div class="dot dot-3"></div>
+          <div class="dot dot-4"></div>
+          <div class="dot dot-5"></div>
+          <div class="dot dot-6"></div>
+          <div class="dot dot-7"></div>
+          <div class="dot dot-8"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Navigation -->
     <nav id="navbar">
       <div class="nav-container">
@@ -364,6 +383,9 @@
 
         async initialize() {
           try {
+            // Show loader
+            this.showLoader();
+
             // Initialize modules
             this.utils = window.UtilsModule;
             this.dataManager = window.DataManagerModule;
@@ -383,8 +405,12 @@
             this.renderNews();
             this.setupEventListeners();
 
+            // Hide loader after everything is loaded
+            this.hideLoader();
+
           } catch (error) {
             console.error('News detail page initialization error:', error);
+            this.hideLoader();
             this.showError();
           }
         }
@@ -529,7 +555,29 @@
           }
         }
 
+        showLoader() {
+          const pageLoader = document.getElementById('pageLoader');
+          if (pageLoader) {
+            pageLoader.style.display = 'flex';
+            pageLoader.classList.remove('hidden');
+          }
+        }
+
+        hideLoader() {
+          const pageLoader = document.getElementById('pageLoader');
+          if (pageLoader) {
+            pageLoader.classList.add('hidden');
+            // Remove loader from DOM after animation
+            setTimeout(() => {
+              if (pageLoader) {
+                pageLoader.remove();
+              }
+            }, 800);
+          }
+        }
+
         showError() {
+          this.hideLoader();
           document.getElementById('loading').style.display = 'none';
           document.getElementById('error').style.display = 'block';
         }
