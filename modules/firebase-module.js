@@ -15,19 +15,11 @@ class FirebaseModule {
         if (this.initialized) return;
 
         try {
-            // Wait for AppConfig to be available
-            await this.waitForAppConfig();
-
             // Импортируем Firebase SDK
             const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getAuth } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
             const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
             const { getStorage } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
-
-            // Check if AppConfig is available
-            if (!window.AppConfig || !window.AppConfig.firebase) {
-                throw new Error('AppConfig.firebase is not available');
-            }
 
             // Инициализируем Firebase
             this.app = initializeApp(window.AppConfig.firebase);
@@ -41,27 +33,6 @@ class FirebaseModule {
             console.error('Firebase initialization error:', error);
             throw error;
         }
-    }
-
-    async waitForAppConfig() {
-        return new Promise((resolve, reject) => {
-            let attempts = 0;
-            const maxAttempts = 50; // 5 seconds max wait
-            
-            const checkConfig = () => {
-                attempts++;
-                
-                if (window.AppConfig && window.AppConfig.firebase) {
-                    resolve();
-                } else if (attempts >= maxAttempts) {
-                    reject(new Error('AppConfig not loaded after 5 seconds'));
-                } else {
-                    setTimeout(checkConfig, 100);
-                }
-            };
-            
-            checkConfig();
-        });
     }
 
     // Auth methods

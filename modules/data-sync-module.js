@@ -17,10 +17,6 @@ class DataSyncModule {
 
         try {
             console.log('Initializing DataSyncModule...');
-            
-            // Wait for dependencies to be available
-            await this.waitForDependencies();
-            
             this.dataManager = window.DataManagerModule;
             this.utils = window.UtilsModule;
 
@@ -51,27 +47,6 @@ class DataSyncModule {
                 window.app.checkDataLoadingComplete();
             }
         }
-    }
-
-    async waitForDependencies() {
-        return new Promise((resolve, reject) => {
-            let attempts = 0;
-            const maxAttempts = 50; // 5 seconds max wait
-            
-            const checkDependencies = () => {
-                attempts++;
-                
-                if (window.DataManagerModule && window.UtilsModule) {
-                    resolve();
-                } else if (attempts >= maxAttempts) {
-                    reject(new Error('Dependencies not loaded after 5 seconds'));
-                } else {
-                    setTimeout(checkDependencies, 100);
-                }
-            };
-            
-            checkDependencies();
-        });
     }
 
     async loadAndUpdateData() {

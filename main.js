@@ -560,10 +560,7 @@ class MaqomSchoolApp {
     async setupDataLoading() {
         try {
             console.log('setupDataLoading called');
-            
-            // Wait for all modules to be available
-            await this.waitForModules();
-            
+            // Wait for modules to be available
             if (window.DataSyncModule) {
                 console.log('DataSyncModule found, initializing...');
                 await window.DataSyncModule.initialize();
@@ -581,28 +578,6 @@ class MaqomSchoolApp {
             // Hide loader even if there's an error
             this.checkDataLoadingComplete();
         }
-    }
-
-    async waitForModules() {
-        return new Promise((resolve, reject) => {
-            let attempts = 0;
-            const maxAttempts = 50; // 5 seconds max wait
-            
-            const checkModules = () => {
-                attempts++;
-                
-                if (window.DataSyncModule && window.DataManagerModule && window.FirebaseModule && window.UtilsModule) {
-                    resolve();
-                } else if (attempts >= maxAttempts) {
-                    console.warn('Some modules not loaded after 5 seconds, continuing anyway');
-                    resolve(); // Continue even if some modules are missing
-                } else {
-                    setTimeout(checkModules, 100);
-                }
-            };
-            
-            checkModules();
-        });
     }
 }
 
