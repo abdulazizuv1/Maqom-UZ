@@ -8,12 +8,36 @@ class DataManagerModule {
     }
 
     async initialize() {
+        // Wait for all dependencies to be available
+        await this.waitForDependencies();
+
         this.firebase = window.FirebaseModule;
         this.utils = window.UtilsModule;
         this.config = window.AppConfig;
 
         await this.firebase.initialize();
         console.log('DataManager module initialized successfully');
+    }
+
+    async waitForDependencies() {
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+            const maxAttempts = 50; // 5 seconds max wait
+            
+            const checkDependencies = () => {
+                attempts++;
+                
+                if (window.FirebaseModule && window.UtilsModule && window.AppConfig) {
+                    resolve();
+                } else if (attempts >= maxAttempts) {
+                    reject(new Error('Dependencies not loaded after 5 seconds'));
+                } else {
+                    setTimeout(checkDependencies, 100);
+                }
+            };
+            
+            checkDependencies();
+        });
     }
 
     // News management

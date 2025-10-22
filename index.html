@@ -410,15 +410,15 @@
 
     <!-- JavaScript -->
     <!-- Configuration -->
-    <script src="config/app-config.js"></script>
+    <script src="config/app-config.js" onerror="console.error('Failed to load app-config.js')"></script>
     
     <!-- Modules -->
-    <script src="modules/utils-module.js"></script>
-    <script src="modules/firebase-module.js"></script>
-    <script src="modules/data-manager-module.js"></script>
-    <script src="modules/data-sync-module.js"></script>
+    <script src="modules/utils-module.js" onerror="console.error('Failed to load utils-module.js')"></script>
+    <script src="modules/firebase-module.js" onerror="console.error('Failed to load firebase-module.js')"></script>
+    <script src="modules/data-manager-module.js" onerror="console.error('Failed to load data-manager-module.js')"></script>
+    <script src="modules/data-sync-module.js" onerror="console.error('Failed to load data-sync-module.js')"></script>
     
     <!-- Main Application -->
-    <script src="main.js"></script>
+    <script src="main.js" onerror="console.error('Failed to load main.js')"></script>
 </body>
 </html>

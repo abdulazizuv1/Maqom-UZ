@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Config Test</title>
+</head>
+<body>
+    <h1>Configuration Test</h1>
+    <div id="status">Loading...</div>
+    
+    <script src="config/app-config.js"></script>
+    <script>
+        console.log('AppConfig loaded:', window.AppConfig);
+        
+        if (window.AppConfig && window.AppConfig.firebase) {
+            document.getElementById('status').innerHTML = '✅ Configuration loaded successfully!';
+            document.getElementById('status').style.color = 'green';
+        } else {
+            document.getElementById('status').innerHTML = '❌ Configuration failed to load!';
+            document.getElementById('status').style.color = 'red';
+        }
+    </script>
+</body>
+</html>
