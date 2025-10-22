@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yangilik Tafsilotlari - Farg'ona Maqom Maktab-Internati</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- AOS Animation -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="icon" href="./img/logo.png" />
+    
+    <style>
+      .news-detail-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 120px 20px 60px;
+        min-height: 100vh;
+      }
+      
+      .news-detail-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      
+      .news-detail-breadcrumb {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #666;
+      }
+      
+      .news-detail-breadcrumb a {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+      
+      .news-detail-breadcrumb a:hover {
+        color: #0056b3;
+      }
+      
+      .news-detail-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        line-height: 1.2;
+      }
+      
+      .news-detail-meta {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      
+      .news-detail-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #666;
+        font-size: 14px;
+      }
+      
+      .news-detail-image {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      }
+      
+      .news-detail-content {
+        background: #fff;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        margin-bottom: 40px;
+      }
+      
+      .news-detail-text {
+        font-size: 16px;
+        line-height: 1.8;
+        color: #444;
+        margin-bottom: 30px;
+      }
+      
+      .news-detail-text p {
+        margin-bottom: 20px;
+      }
+      
+      .news-detail-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      
+      .btn-back {
+        background: #6c757d;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+      
+      .btn-back:hover {
+        background: #5a6268;
+        color: white;
+        text-decoration: none;
+        transform: translateY(-2px);
+      }
+      
+      .btn-share {
+        background: #007bff;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+      }
+      
+      .btn-share:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+      }
+      
+      .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        font-size: 18px;
+        color: #666;
+      }
+      
+      .error-message {
+        text-align: center;
+        padding: 40px;
+        background: #f8d7da;
+        color: #721c24;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      
+      @media (max-width: 768px) {
+        .news-detail-container {
+          padding: 100px 15px 40px;
+        }
+        
+        .news-detail-title {
+          font-size: 1.8rem;
+        }
+        
+        .news-detail-meta {
+          gap: 15px;
+        }
+        
+        .news-detail-content {
+          padding: 20px;
+        }
+        
+        .news-detail-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav id="navbar">
+      <div class="nav-container">
+        <a href="./index.html" class="logo">
+          <img src="./img/logo.jpg" alt="Logo" class="logo-img" />
+          <span class="logo-text">Farg'ona Ixtisoslashtirilgan Maqom Maktab-Internati</span>
+        </a>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="./index.html#home"><i class="fas fa-home"></i> Bosh sahifa</a></li>
+          <li><a href="./index.html#about"><i class="fas fa-info-circle"></i> Biz haqimizda</a></li>
+          <li><a href="./index.html#news"><i class="fas fa-newspaper"></i> Yangiliklar</a></li>
+          <li><a href="./index.html#employees"><i class="fas fa-users"></i> Xodimlar</a></li>
+          <li><a href="./index.html#contact"><i class="fas fa-envelope"></i> Aloqa</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- News Detail Content -->
+    <div class="news-detail-container">
+      <div id="loading" class="loading-spinner">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Yangilik yuklanmoqda...</span>
+      </div>
+      
+      <div id="error" class="error-message" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Yangilik topilmadi yoki yuklashda xatolik yuz berdi.</p>
+        <a href="./index.html#news" class="btn-back">
+          <i class="fas fa-arrow-left"></i>
+          Yangiliklar sahifasiga qaytish
+        </a>
+      </div>
+      
+      <article id="news-content" style="display: none;">
+        <div class="news-detail-header" data-aos="fade-up">
+          <div class="news-detail-breadcrumb">
+            <a href="./index.html">Bosh sahifa</a>
+            <i class="fas fa-chevron-right"></i>
+            <a href="./index.html#news">Yangiliklar</a>
+            <i class="fas fa-chevron-right"></i>
+            <span id="breadcrumb-title">Yangilik</span>
+          </div>
+          <h1 class="news-detail-title" id="news-title">Yangilik Sarlavhasi</h1>
+          <div class="news-detail-meta">
+            <div class="news-detail-meta-item">
+              <i class="far fa-calendar"></i>
+              <span id="news-date">20 Oktabr 2025</span>
+            </div>
+            <div class="news-detail-meta-item">
+              <i class="far fa-user"></i>
+              <span id="news-author">Admin</span>
+            </div>
+            <div class="news-detail-meta-item">
+              <i class="fas fa-tag"></i>
+              <span id="news-category">Yangilik</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="news-detail-content" data-aos="fade-up" data-aos-delay="200">
+          <img id="news-image" src="./img/about_us.jpg" alt="News Image" class="news-detail-image" />
+          <div class="news-detail-text" id="news-text">
+            <p>Yangilik matni bu yerda ko'rsatiladi...</p>
+          </div>
+        </div>
+        
+        <div class="news-detail-actions" data-aos="fade-up" data-aos-delay="400">
+          <a href="./index.html#news" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Yangiliklar sahifasiga qaytish
+          </a>
+          <button class="btn-share" onclick="shareNews()">
+            <i class="fas fa-share-alt"></i>
+            Ulashish
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-container">
+        <div class="footer-content">
+          <div class="footer-logo-section">
+            <div class="footer-logo">
+              <img src="./img/logo.jpg" alt="Logo" />
+              <div>
+                <strong>Maqom Maktab-Internati</strong>
+                <small>An'anadan ilhom, zamonaviylikdan kuch</small>
+              </div>
+            </div>
+            <p class="footer-description">
+              O'zbekiston Respublikasida an'anaviy maqom san'atini o'rganish va
+              rivojlantirishga bag'ishlangan noyob ta'lim muassasasi.
+            </p>
+            <div class="footer-social">
+              <a href="https://www.instagram.com/fargona_maqom_maktabi/" target="_blank">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://t.me/fargonamaqom" target="_blank">
+                <i class="fab fa-telegram-plane"></i>
+              </a>
+              <a href="https://www.facebook.com/groups/1024253032296860/" target="_blank">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+               <a href="https://www.youtube.com/@Fargona_Maqom_Maktabi" target="_blank">
+                <i class="fab fa-youtube"></i>
+              </a>
+            </div>
+          </div>
+          <div class="footer-links-section">
+            <div class="footer-links-column">
+              <h4>Tezkor Havolalar</h4>
+              <ul>
+                <li><a href="./index.html#home"><i class="fas fa-chevron-right"></i> Bosh sahifa</a></li>
+                <li><a href="./index.html#about"><i class="fas fa-chevron-right"></i> Biz haqimizda</a></li>
+                <li><a href="./index.html#news"><i class="fas fa-chevron-right"></i> Yangiliklar</a></li>
+                <li><a href="./index.html#contact"><i class="fas fa-chevron-right"></i> Aloqa</a></li>
+                <li><a href="./admin.html" target="_blank"><i class="fas fa-cog"></i> Admin Panel</a></li>
+              </ul>
+            </div>
+            <div class="footer-links-column">
+              <h4>Bog'lanish</h4>
+              <ul>
+                <li><i class="fas fa-map-marker-alt"></i> Охунбобоев кўчаси 33, Farg'ona, Farg'ona Viloyati Oʻzbekiston</li>
+                <li><i class="fas fa-phone"></i> +998 (73) 244-43-17</li>
+                <li><i class="fas fa-envelope"></i> farmaqommaktab@umail.uz</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>
+            &copy; <span id="year"></span> Farg'ona Ixtisoslashtirilgan Maqom
+            Maktab-Internati. Barcha huquqlar himoyalangan.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Configuration -->
+    <script src="./config/app-config.js"></script>
+    
+    <!-- Modules -->
+    <script src="./modules/firebase-module.js"></script>
+    <script src="./modules/emailjs-module.js"></script>
+    <script src="./modules/utils-module.js"></script>
+    <script src="./modules/data-manager-module.js"></script>
+    <script src="./modules/data-sync-module.js"></script>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="./main.js"></script>
+    
+    <script>
+      class NewsDetailPage {
+        constructor() {
+          this.utils = null;
+          this.dataManager = null;
+          this.newsId = null;
+          this.newsData = null;
+        }
+
+        async initialize() {
+          try {
+            // Initialize modules
+            this.utils = window.UtilsModule;
+            this.dataManager = window.DataManagerModule;
+
+            if (!this.utils || !this.dataManager) {
+              throw new Error('Required modules not loaded');
+            }
+
+            // Get news ID from URL
+            this.newsId = this.getNewsIdFromUrl();
+            if (!this.newsId) {
+              throw new Error('News ID not found in URL');
+            }
+
+            // Load news data
+            await this.loadNewsData();
+            this.renderNews();
+            this.setupEventListeners();
+
+          } catch (error) {
+            console.error('News detail page initialization error:', error);
+            this.showError();
+          }
+        }
+
+        getNewsIdFromUrl() {
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get('id');
+        }
+
+        async loadNewsData() {
+          try {
+            // Try to get news from data manager first
+            const allNews = await this.dataManager.getNews();
+            this.newsData = allNews.find(news => news.id === this.newsId);
+            
+            if (!this.newsData) {
+              // Fallback to static news data
+              this.newsData = this.getStaticNewsData();
+            }
+          } catch (error) {
+            console.error('Error loading news data:', error);
+            // Use static data as fallback
+            this.newsData = this.getStaticNewsData();
+          }
+        }
+
+        getStaticNewsData() {
+          const staticNews = {
+            'news-1': {
+              id: 'news-1',
+              title: 'Xalqaro Maqom Festivali',
+              excerpt: 'Maktabimiz o\'quvchilari xalqaro festivalda qatnashdi va yuqori natijalar ko\'rsatdi.',
+              content: `
+                <p>Farg'ona maqom maktab-internati o'quvchilari xalqaro maqom festivalida faol ishtirok etishdi. Bu festival O'zbekiston, Qozog'iston, Qirg'iziston va boshqa mamlakatlardan kelgan yosh ijrochilarni birlashtirdi.</p>
+                
+                <p>Festival davomida bizning o'quvchilarimiz an'anaviy maqom san'atining turli yo'nalishlarida o'zlarining mahoratlarini namoyish etishdi. Xususan, Shashmaqom, Buxoro maqomlari va Farg'ona maqom yo'nalishlarida ajoyib ijrolar ko'rsatdilar.</p>
+                
+                <p>Festival natijalariga ko'ra, bizning o'quvchilarimiz birinchi, ikkinchi va uchinchi o'rinlarni qo'lga kiritdilar. Bu muvaffaqiyat maktabimizning yuqori darajadagi ta'lim sifatini va o'qituvchilarimizning professional mahoratini tasdiqlaydi.</p>
+                
+                <p>Festival tashkilotchilari bizning o'quvchilarimizning ijrosini yuqori baholadilar va kelgusi yillarda ham bunday tadbirlarda ishtirok etishni taklif qilishdi.</p>
+              `,
+              date: '2025-10-25',
+              author: 'Admin',
+              category: 'Festival',
+              imageUrl: './img/about_us.jpg'
+            },
+            'news-2': {
+              id: 'news-2',
+              title: 'Yangi O\'quv Yili Boshlandi',
+              excerpt: '2025-2026 o\'quv yili tantanali ochilish marosimi bo\'lib o\'tdi.',
+              content: `
+                <p>2025-2026 o'quv yili tantanali ochilish marosimi maktabimizda bo'lib o'tdi. Marosimda barcha o'quvchilar, o'qituvchilar va ota-onalar ishtirok etishdi.</p>
+                
+                <p>Marosimda maktab direktori Mamadjanov Ulug'bek Valiyevich o'quv yili rejalari va yangi loyihalar haqida gapirdi. Xususan, yangi musiqiy asboblar olish, sinf xonalarini zamonaviy texnologiyalar bilan jihozlash va o'quv dasturlarini yanada takomillashtirish rejalari haqida ma'lumot berildi.</p>
+                
+                <p>O'quvchilar yangi o'quv yiliga nisbatan o'z orzularini va maqsadlarini bildirishdi. Ko'pchilik o'quvchilar maqom san'atini chuqurroq o'rganish va xalqaro tanlovlarda ishtirok etish niyatida ekanliklarini bildirishdi.</p>
+                
+                <p>Marosim oxirida o'quvchilar va o'qituvchilar tomonidan kichik konsert dasturi taqdim etildi. Bu yangi o'quv yilining yaxshi boshlanishi uchun ajoyib imkoniyat bo'ldi.</p>
+              `,
+              date: '2025-10-21',
+              author: 'Admin',
+              category: 'Ta\'lim',
+              imageUrl: './img/about_us.jpg'
+            },
+            'news-3': {
+              id: 'news-3',
+              title: 'Ustozlar Konserti',
+              excerpt: 'Maktab o\'qituvchilari tomonidan maxsus konsert dasturi taqdim etildi.',
+              content: `
+                <p>Maktabimizning tajribali o'qituvchilari tomonidan maxsus konsert dasturi tashkil etildi. Bu konsert o'quvchilar va ularning ota-onalari uchun ajoyib musiqiy kecha bo'ldi.</p>
+                
+                <p>Konsertda an'anaviy maqom san'atining turli yo'nalishlari namoyish etildi. O'qituvchilarimiz Shashmaqom, Buxoro maqomlari, Farg'ona maqom yo'nalishlarida o'zlarining professional mahoratlarini ko'rsatdilar.</p>
+                
+                <p>Konsert dasturida turli milliy cholg'u asboblarida ijro etilgan asarlar, jumladan doira, tanbur, g'ijjak, nay, qo'shnay, qashqar rubobi, dutor, chang, qonun va ud asboblarida ijro etilgan asarlar o'rin oldi.</p>
+                
+                <p>Konsert oxirida o'quvchilar o'qituvchilariga minnatdorchilik bildirishdi va ularning professional mahoratlarini yuqori baholadilar. Bu tadbir o'quvchilar va o'qituvchilar o'rtasidagi hamkorlikni mustahkamlashga yordam berdi.</p>
+              `,
+              date: '2025-10-17',
+              author: 'Admin',
+              category: 'Konsert',
+              imageUrl: './img/about_us.jpg'
+            }
+          };
+          
+          return staticNews[this.newsId] || null;
+        }
+
+        renderNews() {
+          if (!this.newsData) {
+            throw new Error('News data not found');
+          }
+
+          // Hide loading, show content
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('news-content').style.display = 'block';
+
+          // Update page title
+          document.title = `${this.newsData.title} - Farg'ona Maqom Maktab-Internati`;
+
+          // Update breadcrumb
+          document.getElementById('breadcrumb-title').textContent = this.newsData.title;
+
+          // Update news content
+          document.getElementById('news-title').textContent = this.newsData.title;
+          document.getElementById('news-date').textContent = this.utils.formatDate(this.newsData.date);
+          document.getElementById('news-author').textContent = this.newsData.author;
+          document.getElementById('news-category').textContent = this.newsData.category;
+          document.getElementById('news-image').src = this.newsData.imageUrl || './img/about_us.jpg';
+          document.getElementById('news-image').alt = this.newsData.title;
+          document.getElementById('news-text').innerHTML = this.newsData.content;
+
+          // Initialize AOS animations
+          AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+          });
+        }
+
+        setupEventListeners() {
+          // Mobile menu toggle
+          const menuToggleButton = document.getElementById('menuToggle');
+          if (menuToggleButton) {
+            menuToggleButton.addEventListener('click', () => {
+              const navLinks = document.getElementById('navLinks');
+              if (navLinks) {
+                navLinks.classList.toggle('active');
+              }
+            });
+          }
+
+          // Navbar scroll effect
+          const navbar = document.getElementById('navbar');
+          if (navbar) {
+            window.addEventListener('scroll', () => {
+              if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+              } else {
+                navbar.classList.remove('scrolled');
+              }
+            });
+          }
+        }
+
+        showError() {
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('error').style.display = 'block';
+        }
+      }
+
+      // Share function
+      function shareNews() {
+        if (navigator.share) {
+          navigator.share({
+            title: document.getElementById('news-title').textContent,
+            text: document.getElementById('news-title').textContent,
+            url: window.location.href
+          });
+        } else {
+          // Fallback: copy to clipboard
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('Havola nusxalandi!');
+          });
+        }
+      }
+
+      // Initialize page
+      const newsDetailPage = new NewsDetailPage();
+      document.addEventListener('DOMContentLoaded', async () => {
+        // Wait for modules to load
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await newsDetailPage.initialize();
+      });
+
+      // Set footer year
+      document.addEventListener('DOMContentLoaded', () => {
+        const yearSpan = document.getElementById('year');
+        if (yearSpan) {
+          yearSpan.textContent = String(new Date().getFullYear());
+        }
+      });
+    </script>
+  </body>
+</html>

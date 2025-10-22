@@ -1,0 +1,102 @@
+# Configuration Files (Contains sensitive keys)
+config/app-config.js
+config/app-config.json
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+
+# Security: Prevent accidental commits of sensitive data
+**/config/app-config.js
+**/firebase-config.js
+**/admin-firebase.js
+
+# Keep example files
+!config/app-config.example.js
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# Build directories
+dist/
+build/
+
+# Temporary files
+tmp/
+temp/
+
+# Firebase
+.firebase/
+firebase.json
+firebase-debug.log
+firebase-debug.*.log
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Security files (should be committed for deployment)
+# admin/.htaccess
+# admin/security-monitor.js
+# admin/admin-protected.html
+# ADMIN_SECURITY.md

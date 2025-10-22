@@ -112,60 +112,6 @@ Maqom UZ/
    python -m http.server 8000
    ```
 
-## 🔐 Безопасность
-
-### Firebase Security Rules
-Убедитесь, что ваши Firebase Security Rules настроены правильно:
-
-```javascript
-// firestore.rules
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    // Публичный доступ для чтения
-    match /news/{document} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    
-    match /employees/{document} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-
-// storage.rules
-rules_version = '2';
-service firebase.storage {
-  match /b/{bucket}/o {
-    match /{allPaths=**} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-  }
-}
-```
-
-### Аутентификация
-- Создайте пользователей в Firebase Authentication
-- Используйте email/password аутентификацию
-- Доступ к админ-панели только для аутентифицированных пользователей
-
-## 📱 Использование
-
-### Основной сайт
-1. Откройте `index.html` в браузере
-2. Навигация через меню в шапке
-3. Просмотр новостей в слайдере
-4. Отправка сообщений через контактную форму
-
-### Админ-панель
-1. Перейдите на `/admin/admin.html`
-2. Войдите с учетными данными Firebase
-3. Управляйте новостями и персоналом
-4. Загружайте изображения
-
 ## 🎨 Кастомизация
 
 ### Цветовая схема
@@ -211,14 +157,6 @@ service firebase.storage {
 
 ### Логирование
 Все модули используют консольное логирование. Откройте Developer Tools для просмотра логов.
-
-## 🤝 Вклад в проект
-
-1. Fork репозитория
-2. Создайте feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit изменения (`git commit -m 'Add some AmazingFeature'`)
-4. Push в branch (`git push origin feature/AmazingFeature`)
-5. Откройте Pull Request
 
 ## 📄 Лицензия
 

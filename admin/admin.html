@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Maqom Maktab-Internati</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Firebase SDK -->
+    <script src="../config/app-config.js"></script>
+    
+    <!-- Modules -->
+    <script src="../modules/firebase-module.js"></script>
+    <script src="../modules/utils-module.js"></script>
+    <script src="../modules/data-manager-module.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./admin-style.css" />
+    <link rel="icon" href="/img/logo.png" />
+    
+    <style>
+        .security-warning {
+            background: #ff4444;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .access-log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 12px;
+        }
+        .security-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        
+        /* Security Dashboard Styles */
+        .security-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .security-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .security-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .security-card h3 i {
+            margin-right: 8px;
+        }
+        
+        .login-history {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .security-status {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .status-value {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .security-settings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .security-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .security-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .security-btn i {
+            font-size: 16px;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-content {
+            margin-top: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .stat-content h3 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .stat-content p {
+            color: #666;
+            margin: 5px 0 0 0;
+        }
+        
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .info-card p {
+            margin: 8px 0;
+            color: #666;
+        }
+        
+        .info-card strong {
+            color: var(--text-dark);
+        }
+    </style>
+</head>
+<body>
+    <!-- Security Warning -->
+    <div class="security-warning">
+        <i class="fas fa-shield-alt"></i>
+        XAVFSIZLIK: Bu sahifa faqat ruxsat etilgan foydalanuvchilar uchun!
+    </div>
+
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <img src="../img/logo.png" alt="Logo" class="login-logo" />
+                <h1>Admin Panel</h1>
+                <p>Maqom Maktab-Internati boshqaruv paneli</p>
+            </div>
+            
+            <!-- Security Info -->
+            <div class="security-info">
+                <h4><i class="fas fa-info-circle"></i> Xavfsizlik ma'lumotlari:</h4>
+                <ul>
+                    <li>Barcha kirish urinishlari kuzatiladi</li>
+                    <li>Juda ko'p noto'g'ri urinishlar bloklanadi</li>
+                    <li>Faol sessiyalar monitoring qilinadi</li>
+                </ul>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </label>
+                    <input type="email" id="email" name="email" required />
+                </div>
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        Parol
+                    </label>
+                    <input type="password" id="password" name="password" required />
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="rememberMe" />
+                        Meni eslab qol
+                    </label>
+                </div>
+                <button type="submit" class="login-btn">
+                    <span id="loginLoading" class="loading hidden">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </span>
+                    <span id="loginText">Kirish</span>
+                </button>
+                <div id="loginError" class="error-message"></div>
+            </form>
+            
+            <!-- Access Log -->
+            <div class="access-log" id="accessLog">
+                <strong>Oxirgi kirish:</strong> <span id="lastAccess">Ma'lumot yo'q</span><br>
+                <strong>IP manzil:</strong> <span id="currentIP">Yuklanmoqda...</span><br>
+                <strong>Urinishlar soni:</strong> <span id="attemptCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard hidden">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="../img/logo.jpg" alt="Logo" class="header-logo" />
+                <h1>Admin Panel</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-info" id="userInfo"></span>
+                <button id="logoutBtn" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Chiqish
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="admin-nav">
+            <button class="nav-btn active" data-section="news">
+                <i class="fas fa-newspaper"></i>
+                Yangiliklar
+            </button>
+            <button class="nav-btn" data-section="employees">
+                <i class="fas fa-users"></i>
+                Xodimlar
+            </button>
+            <button class="nav-btn" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                Boshqaruv
+            </button>
+            <button class="nav-btn" data-section="security">
+                <i class="fas fa-shield-alt"></i>
+                Xavfsizlik
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- News Management Section -->
+            <section id="newsSection" class="content-section active">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2>Yangiliklar boshqaruvi</h2>
+                        <span class="news-count" id="newsCountBadge">0 yangilik</span>
+                    </div>
+                    <button id="addNewsBtn" class="add-btn">
+                        <i class="fas fa-plus"></i>
+                        Yangi yangilik qo'shish
+                    </button>
+                </div>
+                
+                <div class="loading-container" id="newsLoading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Yangiliklar yuklanmoqda...
+                </div>
+                
+                <div class="news-list" id="newsList">
+                    <!-- News items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Employees Management Section -->
+            <section id="employeesSection" class="content-section">
+                <div class="section-header">
+                    <h2>Xodimlar boshqaruvi</h2>
+                    <button id="addEmployeeBtn" class="add-btn">
+                        <i class="fas fa-plus"></i>
+                        Yangi xodim qo'shish
+                    </button>
+                </div>
+                
+                <div class="loading-container" id="employeesLoading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    Xodimlar yuklanmoqda...
+                </div>
+                
+                <div class="employees-list" id="employeesList">
+                    <!-- Employee items will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section">
+                <div class="section-header">
+                    <h2>Boshqaruv paneli</h2>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-newspaper"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="newsCount">0</h3>
+                                <p>Yangiliklar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="employeesCount">0</h3>
+                                <p>Xodimlar</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="currentTime">--:--</h3>
+                                <p>Joriy vaqt</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="stat-content">
+                                <h3 id="firebaseStatus">Yuklanmoqda...</h3>
+                                <p>Firebase holati</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <h3>Foydalanuvchi ma'lumotlari</h3>
+                            <p><strong>Email:</strong> <span id="currentUser">--</span></p>
+                            <p><strong>Oxirgi kirish:</strong> <span id="lastLogin">--</span></p>
+                            <p><strong>Faol sessiya:</strong> <span id="sessionTime">--</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security Section -->
+            <section id="securitySection" class="content-section">
+                <div class="section-header">
+                    <h2>Xavfsizlik boshqaruvi</h2>
+                    <p>Kirish loglari va xavfsizlik sozlamalari</p>
+                </div>
+                
+                <div class="security-dashboard">
+                    <div class="security-card">
+                        <h3><i class="fas fa-history"></i> Oxirgi kirishlar</h3>
+                        <div id="loginHistory" class="login-history">
+                            <p>Ma'lumotlar yuklanmoqda...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="security-card">
+                        <h3><i class="fas fa-shield-alt"></i> Xavfsizlik holati</h3>
+                        <div class="security-status">
+                            <div class="status-item">
+                                <span class="status-label">Firebase Auth:</span>
+                                <span class="status-value" id="authStatus">Tekshirilmoqda...</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Sessiya:</span>
+                                <span class="status-value" id="sessionStatus">Faol</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">IP manzil:</span>
+                                <span class="status-value" id="ipAddress">--</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="security-card">
+                        <h3><i class="fas fa-cog"></i> Xavfsizlik sozlamalari</h3>
+                        <div class="security-settings">
+                            <button class="security-btn" id="changePasswordBtn">
+                                <i class="fas fa-key"></i>
+                                Parolni o'zgartirish
+                            </button>
+                            <button class="security-btn" id="logoutAllSessionsBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Barcha sessiyalarni tugatish
+                            </button>
+                            <button class="security-btn" id="exportLogsBtn">
+                                <i class="fas fa-download"></i>
+                                Loglarni yuklab olish
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- News Modal -->
+    <div id="newsModal" class="modal" data-modal="newsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="newsModalTitle">Yangi yangilik</h3>
+                <button class="close-btn" data-modal="newsModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="newsForm" class="modal-form">
+                <input type="hidden" id="newsId" name="newsId" />
+                <div class="form-group">
+                    <label for="newsTitle">Sarlavha</label>
+                    <input type="text" id="newsTitle" name="newsTitle" required />
+                </div>
+                <div class="form-group">
+                    <label for="newsCategory">Kategoriya</label>
+                    <select id="newsCategory" name="newsCategory" required>
+                        <option value="">Kategoriyani tanlang</option>
+                        <option value="news">Yangilik</option>
+                        <option value="event">Tadbir</option>
+                        <option value="announcement">E'lon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newsExcerpt">Qisqacha ma'lumot</label>
+                    <textarea id="newsExcerpt" name="newsExcerpt" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newsContent">To'liq matn</label>
+                    <textarea id="newsContent" name="newsContent" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="newsDate">Sana</label>
+                    <input type="date" id="newsDate" name="newsDate" required />
+                </div>
+                <div class="form-group">
+                    <label for="newsImageFile">Rasm</label>
+                    <input type="file" id="newsImageFile" name="newsImageFile" accept="image/*" />
+                    <div id="newsImagePreview" class="file-preview"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" data-modal="newsModal">Bekor qilish</button>
+                    <button type="submit" class="save-btn">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Modal -->
+    <div id="employeeModal" class="modal" data-modal="employeeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="employeeModalTitle">Yangi xodim</h3>
+                <button class="close-btn" data-modal="employeeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="employeeForm" class="modal-form">
+                <input type="hidden" id="employeeId" name="employeeId" />
+                <div class="form-group">
+                    <label for="employeeName">Ism</label>
+                    <input type="text" id="employeeName" name="employeeName" required />
+                </div>
+                <div class="form-group">
+                    <label for="employeeRole">Lavozim</label>
+                    <input type="text" id="employeeRole" name="employeeRole" required />
+                </div>
+                <div class="form-group">
+                    <label for="employeeBio">Biografiya</label>
+                    <textarea id="employeeBio" name="employeeBio" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="employeePhone">Telefon</label>
+                    <input type="tel" id="employeePhone" name="employeePhone" />
+                </div>
+                <div class="form-group">
+                    <label for="employeeEmail">Email</label>
+                    <input type="email" id="employeeEmail" name="employeeEmail" />
+                </div>
+                <div class="form-group">
+                    <label for="employeeImageFile">Rasm</label>
+                    <input type="file" id="employeeImageFile" name="employeeImageFile" accept="image/*" />
+                    <div id="employeeImagePreview" class="file-preview"></div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" data-modal="employeeModal">Bekor qilish</button>
+                    <button type="submit" class="save-btn">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Script -->
+    <script src="./admin-firebase.js"></script>
+    
+    <!-- Security Script -->
+    <script>
+        // Security enhancements
+        class SecurityManager {
+            constructor() {
+                this.attemptCount = 0;
+                this.maxAttempts = 5;
+                this.lockoutTime = 15 * 60 * 1000; // 15 minutes
+                this.lastAttempt = 0;
+                this.sessionStart = Date.now();
+                this.init();
+            }
+
+            init() {
+                this.loadSecurityData();
+                this.updateAccessInfo();
+                this.startSessionTimer();
+                this.setupSecurityMonitoring();
+            }
+
+            loadSecurityData() {
+                const saved = localStorage.getItem('adminSecurity');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    this.attemptCount = data.attemptCount || 0;
+                    this.lastAttempt = data.lastAttempt || 0;
+                }
+            }
+
+            saveSecurityData() {
+                const data = {
+                    attemptCount: this.attemptCount,
+                    lastAttempt: this.lastAttempt,
+                    sessionStart: this.sessionStart
+                };
+                localStorage.setItem('adminSecurity', JSON.stringify(data));
+            }
+
+            updateAccessInfo() {
+                // Update IP address
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('currentIP').textContent = data.ip;
+                        document.getElementById('ipAddress').textContent = data.ip;
+                    })
+                    .catch(() => {
+                        document.getElementById('currentIP').textContent = 'Noma\'lum';
+                        document.getElementById('ipAddress').textContent = 'Noma\'lum';
+                    });
+
+                // Update attempt count
+                document.getElementById('attemptCount').textContent = this.attemptCount;
+
+                // Update last access
+                const lastAccess = localStorage.getItem('lastAdminAccess');
+                if (lastAccess) {
+                    document.getElementById('lastAccess').textContent = new Date(lastAccess).toLocaleString('uz-UZ');
+                }
+            }
+
+            startSessionTimer() {
+                setInterval(() => {
+                    const now = Date.now();
+                    const sessionTime = Math.floor((now - this.sessionStart) / 1000);
+                    const minutes = Math.floor(sessionTime / 60);
+                    const seconds = sessionTime % 60;
+                    document.getElementById('sessionTime').textContent = 
+                        `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            setupSecurityMonitoring() {
+                // Monitor for suspicious activity
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                        this.logSecurityEvent('DevTools opened');
+                    }
+                });
+
+                // Monitor page visibility
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.logSecurityEvent('Page hidden');
+                    } else {
+                        this.logSecurityEvent('Page visible');
+                    }
+                });
+
+                // Auto-logout after inactivity
+                let inactivityTimer;
+                const resetTimer = () => {
+                    clearTimeout(inactivityTimer);
+                    inactivityTimer = setTimeout(() => {
+                        this.logSecurityEvent('Auto-logout due to inactivity');
+                        if (window.firebaseAdmin) {
+                            window.firebaseAdmin.logout();
+                        }
+                    }, 30 * 60 * 1000); // 30 minutes
+                };
+
+                ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+                    document.addEventListener(event, resetTimer, true);
+                });
+            }
+
+            logSecurityEvent(event) {
+                const log = {
+                    timestamp: new Date().toISOString(),
+                    event: event,
+                    userAgent: navigator.userAgent,
+                    url: window.location.href
+                };
+                
+                const logs = JSON.parse(localStorage.getItem('securityLogs') || '[]');
+                logs.push(log);
+                
+                // Keep only last 100 logs
+                if (logs.length > 100) {
+                    logs.splice(0, logs.length - 100);
+                }
+                
+                localStorage.setItem('securityLogs', JSON.stringify(logs));
+            }
+
+            checkLoginAttempt() {
+                const now = Date.now();
+                
+                // Check if locked out
+                if (this.attemptCount >= this.maxAttempts) {
+                    if (now - this.lastAttempt < this.lockoutTime) {
+                        return false; // Still locked out
+                    } else {
+                        // Reset after lockout period
+                        this.attemptCount = 0;
+                    }
+                }
+                
+                this.attemptCount++;
+                this.lastAttempt = now;
+                this.saveSecurityData();
+                
+                return true;
+            }
+
+            resetAttempts() {
+                this.attemptCount = 0;
+                this.saveSecurityData();
+            }
+
+            exportLogs() {
+                const logs = JSON.parse(localStorage.getItem('securityLogs') || '[]');
+                const dataStr = JSON.stringify(logs, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `security-logs-${new Date().toISOString().split('T')[0]}.json`;
+                link.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Initialize security manager
+        const securityManager = new SecurityManager();
+
+        // Override login function with security checks
+        if (window.firebaseAdmin) {
+            const originalLogin = window.firebaseAdmin.login;
+            window.firebaseAdmin.login = async function(email, password) {
+                if (!securityManager.checkLoginAttempt()) {
+                    document.getElementById('loginError').textContent = 
+                        'Juda ko\'p noto\'g\'ri urinishlar. 15 daqiqa kutib turing.';
+                    return;
+                }
+
+                try {
+                    await originalLogin.call(this, email, password);
+                    securityManager.resetAttempts();
+                    localStorage.setItem('lastAdminAccess', new Date().toISOString());
+                    securityManager.logSecurityEvent('Successful login');
+                } catch (error) {
+                    securityManager.logSecurityEvent('Failed login attempt');
+                    throw error;
+                }
+            };
+        }
+
+        // Add security methods to firebaseAdmin
+        if (window.firebaseAdmin) {
+            window.firebaseAdmin.changePassword = function() {
+                const newPassword = prompt('Yangi parolni kiriting (min 8 belgi):');
+                if (newPassword && newPassword.length >= 8) {
+                    // In a real implementation, you would call Firebase Auth updatePassword
+                    alert('Parol o\'zgartirish funksiyasi keyingi versiyada qo\'shiladi.');
+                    securityManager.log('Password change attempted');
+                } else if (newPassword) {
+                    alert('Parol kamida 8 belgidan iborat bo\'lishi kerak!');
+                }
+            };
+
+            window.firebaseAdmin.logoutAllSessions = function() {
+                if (confirm('Barcha sessiyalarni tugatishni xohlaysizmi?')) {
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    securityManager.log('All sessions terminated');
+                    this.logout();
+                }
+            };
+
+            window.firebaseAdmin.exportLogs = function() {
+                securityManager.exportLogs();
+            };
+        }
+
+        // Setup security button event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const changePasswordBtn = document.getElementById('changePasswordBtn');
+            const logoutAllSessionsBtn = document.getElementById('logoutAllSessionsBtn');
+            const exportLogsBtn = document.getElementById('exportLogsBtn');
+
+            if (changePasswordBtn) {
+                changePasswordBtn.addEventListener('click', function() {
+                    if (window.firebaseAdmin) {
+                        window.firebaseAdmin.changePassword();
+                    }
+                });
+            }
+
+            if (logoutAllSessionsBtn) {
+                logoutAllSessionsBtn.addEventListener('click', function() {
+                    if (window.firebaseAdmin) {
+                        window.firebaseAdmin.logoutAllSessions();
+                    }
+                });
+            }
+
+            if (exportLogsBtn) {
+                exportLogsBtn.addEventListener('click', function() {
+                    if (window.firebaseAdmin) {
+                        window.firebaseAdmin.exportLogs();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
