@@ -45,7 +45,7 @@ class FirebaseAdminPanel {
     }
 
     async checkAuthState() {
-        const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
         
         onAuthStateChanged(this.firebase.getAuth(), (user) => {
             if (user) {
@@ -68,7 +68,7 @@ class FirebaseAdminPanel {
             loginLoading.classList.remove('hidden');
             loginBtn.disabled = true;
 
-            const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            const { signInWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
             await signInWithEmailAndPassword(this.firebase.getAuth(), email, password);
             console.log('Login successful');
         } catch (error) {
@@ -108,7 +108,7 @@ class FirebaseAdminPanel {
 
     async logout() {
         try {
-            const { signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            const { signOut } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
             await signOut(this.firebase.getAuth());
             console.log('Logout successful');
         } catch (error) {

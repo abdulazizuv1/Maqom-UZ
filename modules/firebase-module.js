@@ -16,10 +16,10 @@ class FirebaseModule {
 
         try {
             // Импортируем Firebase SDK
-            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-            const { getAuth } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-            const { getFirestore } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const { getStorage } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+            const { initializeApp } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js');
+            const { getAuth } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js');
+            const { getFirestore } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
+            const { getStorage } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js');
 
             // Инициализируем Firebase
             this.app = initializeApp(window.AppConfig.firebase);

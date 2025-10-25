@@ -23,13 +23,13 @@ class DataManagerModule {
             const cached = this.getFromCache(cacheKey);
             if (cached) return cached;
 
-            const { collection, query, orderBy: fbOrderBy, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { collection, query, orderBy: fbOrderBy, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const newsRef = collection(this.firebase.getFirestore(), 'news');
             let q = query(newsRef, fbOrderBy(orderBy, orderDirection));
             
             if (limit) {
-                const { limit: fbLimit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const { limit: fbLimit } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
                 q = query(newsRef, fbOrderBy(orderBy, orderDirection), fbLimit(limit));
             }
 
@@ -57,7 +57,7 @@ class DataManagerModule {
 
     async getNewsById(id) {
         try {
-            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             const newsRef = doc(this.firebase.getFirestore(), 'news', id);
             const newsSnap = await getDoc(newsRef);
             
@@ -79,7 +79,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const newsRef = collection(this.firebase.getFirestore(), 'news');
             const docData = {
@@ -108,7 +108,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { doc, updateDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, updateDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const newsRef = doc(this.firebase.getFirestore(), 'news', id);
             
@@ -143,7 +143,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const newsRef = doc(this.firebase.getFirestore(), 'news', id);
             console.log('Deleting news with user:', currentUser.email);
@@ -169,13 +169,13 @@ class DataManagerModule {
             }
 
             console.log('Fetching employees from Firebase...');
-            const { collection, query, orderBy: fbOrderBy, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { collection, query, orderBy: fbOrderBy, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const employeesRef = collection(this.firebase.getFirestore(), 'employees');
             let q = query(employeesRef, fbOrderBy(orderBy, orderDirection));
             
             if (limit) {
-                const { limit: fbLimit } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const { limit: fbLimit } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
                 q = query(employeesRef, fbOrderBy(orderBy, orderDirection), fbLimit(limit));
             }
 
@@ -201,7 +201,7 @@ class DataManagerModule {
 
     async getEmployeeById(id) {
         try {
-            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             const employeeRef = doc(this.firebase.getFirestore(), 'employees', id);
             const employeeSnap = await getDoc(employeeRef);
             
@@ -223,7 +223,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { collection, addDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const employeesRef = collection(this.firebase.getFirestore(), 'employees');
             const docData = {
@@ -252,7 +252,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { doc, updateDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, updateDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const employeeRef = doc(this.firebase.getFirestore(), 'employees', id);
             
@@ -287,7 +287,7 @@ class DataManagerModule {
                 throw new Error('Foydalanuvchi autentifikatsiya qilinmagan');
             }
             
-            const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { doc, deleteDoc } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js');
             
             const employeeRef = doc(this.firebase.getFirestore(), 'employees', id);
             console.log('Deleting employee with user:', currentUser.email);
@@ -304,7 +304,7 @@ class DataManagerModule {
     // File upload management
     async uploadFile(file, folder, fileName = null) {
         try {
-            const { ref, uploadBytes, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+            const { ref, uploadBytes, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js');
             
             // Check if user is authenticated
             const currentUser = this.firebase.getAuth().currentUser;
@@ -345,7 +345,7 @@ class DataManagerModule {
 
     async deleteFile(fileUrl) {
         try {
-            const { ref, deleteObject } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
+            const { ref, deleteObject } = await import('https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js');
             
             const fileRef = ref(this.firebase.getStorage(), fileUrl);
             await deleteObject(fileRef);
